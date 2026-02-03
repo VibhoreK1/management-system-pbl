@@ -1,21 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Login</title>
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+<script src="script.js"></script>
+  <body>
+    <div class="login-card">
+    <h2>Login</h2>
 
-<h1>Login</h1>
+     <p id="successMsg" class="success"></p>
 
-<form>
-    <label>Email:</label><br>
-    <input type="email"><br><br>
+    <form id="loginForm" action="/dashboard.html" method="post">
 
-    <label>Password:</label><br>
-    <input type="password"><br><br>
+        <label>Email</label>
+        <input type="email" id="email">
+        <small class="error" id="emailError"></small>
 
-    <button type="submit">Login</button>
-</form>
+        <label>Password</label>
+        <input type="password" id="password">
+        <small class="error" id="passwordError"></small>
 
-</body>
+        <button type="submit">Login</button>
+
+    </form>
+</div>
+
+    
+  </body>
 </html>
