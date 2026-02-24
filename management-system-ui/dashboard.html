@@ -1,20 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Dashboard</title>
-</head>
-<body>
-
+  </head>
+  <body>
     <h1 id="email"></h1>
     <p>You have logged in successfully.</p>
+    <button id="logoutBtn">Logout</button>
+  </body>
 
-</body>
+  <script>
+    const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-<script>
-     const email = localStorage.getItem("userEmail");
-     const part = email.split('@');
-     const userName = part[0];
+    if (!isLoggedIn) {
+      window.location.href = "login.html";
+    }
+    const email = localStorage.getItem("userEmail");
+    const part = email.split("@");
+    const userName = part[0];
     document.getElementById("email").textContent =
-        "Welcome to Dashboard: " + userName;
-</script>
+      "Welcome to Dashboard: " + userName;
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        localStorage.removeItem("isLoggedIn");
+        localStorage.removeItem("userEmail");
+
+        window.location.href = "login.html";
+      });
+    }
+  </script>
 </html>
