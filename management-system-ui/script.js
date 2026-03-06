@@ -2,9 +2,9 @@
 // const passwordInput = document.getElementById("password");
 // const form = document.getElementById("loginForm");
 
-// form.addEventListener("submit", function (event) {
+// form.addEventListener("submit", function (e) {
 
-//     event.preventDefault();
+//     e.preventDefault();
 
 //     const email = emailInput.value;
 //     const password = passwordInput.value;
@@ -109,14 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("loginForm");
 
-  // Protect Dashboard
-  if (window.location.pathname.includes("dashboard.html")) {
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    if (!isLoggedIn) {
-      window.location.href = "login.html";
-    }
-  }
+  
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault(); // stop page reload
@@ -152,3 +145,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+

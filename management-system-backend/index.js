@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("Backend is running");
+  res.send("hi Vib how are u?");
 });
 
 app.post("/login", (req, res) => {
