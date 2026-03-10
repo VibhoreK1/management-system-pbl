@@ -3,16 +3,21 @@ const cors = require("cors");
 
 const app = express();
 
-const PORT = 3000;
+const PORT = 4001;
 
 app.use(express.json());
 app.use(cors());
 
 app.get("/", (req, res) => {
-  res.send("hi Vib how are u?");
+const obj ={
+    name:"Shukla",
+    Class:1
+}
+
+  res.send(obj);
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", (req, res) => { 
   const email = req.body.email;
   const password = req.body.password;
 

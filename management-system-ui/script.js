@@ -95,6 +95,9 @@
 // });
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
+
   const currentPage = window.location.pathname;
 
   
@@ -116,6 +119,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+
+
+
+         //error elements
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    // reset errors
+    emailError.textContent = "";
+    passwordError.textContent = "";
+
+    let isValid = true;
+
+    // EMAIL VALIDATION
+    if (email === "") {
+      emailError.textContent = "Email is required";
+      isValid = false;
+    } else if (!email.includes("@")) {
+      emailError.textContent = "Enter a valid email";
+      isValid = false;
+    }
+
+    // PASSWORD VALIDATION
+    if (password === "") {
+      passwordError.textContent = "Password is required";
+      isValid = false;
+    } else if (password.length < 6) {
+      passwordError.textContent = "Password must be at least 6 characters";
+      isValid = false;
+    }
+
+    if(isValid){
 
     try {
       const response = await fetch("http://localhost:3000/login", {
@@ -143,6 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Server error");
       console.error(error);
     }
+  }
   });
 });
 
