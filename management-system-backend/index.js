@@ -1,5 +1,11 @@
 const express = require("express");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+
+const authenticateToken = require("./middleware/auth");
+
+
+const secret_Key ="SecuredKey123";
 
 const app = express();
 
@@ -30,8 +36,17 @@ app.post("/login", (req, res) => {
 
   // fake authentication (for now)
   if (email === "vibhorkapoor123@gmail.com" && password === "vib@123") {
+
+    const token = jwt.sign(
+      { email: email },
+      secret_Key,
+      { expiresIn: "1h" }
+    );
+
+
     return res.json({
       success: true,
+      token:token,
       message: "Login successful",
     });
   }
@@ -39,6 +54,17 @@ app.post("/login", (req, res) => {
   return res.status(401).json({
     message: "Invalid credentials",
   });
+});
+
+
+//dashboard
+app.get("/dashboard-data", authenticateToken, (req, res) => {
+
+  res.json({
+    message: "Welcome to protected dashboard",
+    user: req.user
+  });
+
 });
 
 app.listen(PORT, () => {

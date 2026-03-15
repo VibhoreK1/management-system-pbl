@@ -9,27 +9,5 @@
     <button id="logoutBtn">Logout</button>
   </body>
 
-  <script>
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-
-    if (!isLoggedIn) {
-      window.location.href = "login.html";
-    }
-    const email = localStorage.getItem("userEmail");
-    const part = email.split("@");
-    const userName = part[0];
-    document.getElementById("email").textContent =
-      "Welcome to Dashboard: " + userName;
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("isLoggedIn");
-        localStorage.removeItem("userEmail");
-
-        window.location.href = "login.html";
-      });
-    }
-  </script>
+  <script src="dashboard.js"></script>
 </html>
