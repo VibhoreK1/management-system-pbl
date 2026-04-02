@@ -21,6 +21,7 @@ function authenticateToken(req, res, next) {
         message: "Invalid token"
       });
     }
+    console.log("user",user);
 
     req.user = user;
 

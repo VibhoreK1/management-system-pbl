@@ -20,6 +20,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log("Dashboard Data:", data);
 
+    const welcomeHeading =document.getElementById("Welcome");
+    welcomeHeading.textContent = data.message;
+
     const email = localStorage.getItem("userEmail");
 
     if (email) {

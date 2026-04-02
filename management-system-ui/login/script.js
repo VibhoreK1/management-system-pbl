@@ -88,14 +88,94 @@
 //       setTimeout(function () {
 //         // setting user info in local storage so that we can use it in future
 //         localStorage.setItem("userEmail", email);
-//         window.location.href = "dashboard.html";
+//         window.location.href = "../dashboard.html";
 //       }, 1500);
 //     }
 //   });
 // });
+// document.addEventListener("DOMContentLoaded", () => {
+
+//   const currentPage = window.location.pathname;// https://localhost/127:00.../login.html
+
+//   // Prevent logged-in user from accessing login page
+//   if (currentPage.includes("login.html")) {
+//     if (localStorage.getItem("token")) {
+//       window.location.href = "../dashboard.html";
+//       return;
+//     }
+//   }
+
+//   const form = document.getElementById("loginForm");
+
+//   form.addEventListener("submit", async (e) => {
+//     e.preventDefault(); // stop page reload
+
+//     const email = document.getElementById("email").value;
+//     const password = document.getElementById("password").value;
+
+//          //error elements
+//     const emailError = document.getElementById("emailError");
+//     const passwordError = document.getElementById("passwordError");
+
+//     // reset errors
+//     emailError.textContent = "";
+//     passwordError.textContent = "";
+
+//     let isValid = true;
+
+//     // EMAIL VALIDATION
+//     if (email === "") {
+//       emailError.textContent = "Email is required";
+//       isValid = false;
+//     } else if (!email.includes("@")) {
+//       emailError.textContent = "Enter a valid email";
+//       isValid = false;
+//     }
+
+//     // PASSWORD VALIDATION
+//     if (password === "") {
+//       passwordError.textContent = "Password is required";
+//       isValid = false;
+//     } else if (password.length < 6) {
+//       passwordError.textContent = "Password must be at least 6 characters";
+//       isValid = false;
+//     }
+
+//     if(isValid){
+
+//     try {
+//       const response = await fetch("http://localhost:4001/login", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         body: JSON.stringify({ email, password }),
+//       });
+//       console.log(response);
+
+//       const data = await response.json();
+//       console.log(data);
+
+//       if (data.success == true) {
+//         // Save login state
+//         localStorage.setItem("isLoggedIn", "true");
+//         localStorage.setItem("userEmail", email);
+//         alert("Login successful");
+
+//         window.location.href = "../dashboard.html";
+//       }
+//       else {
+//           alert("Invalid credentials");
+//         }
+//     } catch (error) {
+//       alert("Server error");
+//       console.error(error);
+//     }
+//   }
+//   });
+// });
 
 document.addEventListener("DOMContentLoaded", () => {
-
   const currentPage = window.location.pathname.split("/").pop();
 
   // Prevent logged-in user from accessing login page
@@ -109,7 +189,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("loginForm");
 
   if (form) {
-
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -143,9 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (isValid) {
-
         try {
-
           const response = await fetch("http://localhost:4001/login", {
             method: "POST",
             headers: {
@@ -153,35 +230,23 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify({ email, password }),
           });
-
+          
           const data = await response.json();
-
           if (data.success === true) {
-
             localStorage.setItem("token", data.token);
             localStorage.setItem("userEmail", email);
 
-            alert("Login successful");
+            alert(data.message);
 
-            window.location.href = "../dashboard.html";
-
+           window.location.href = "../dashboard.html";
           } else {
             alert("Invalid credentials");
           }
-
         } catch (error) {
           alert("Server error");
           console.error(error);
         }
-
       }
-
     });
-
   }
-
- 
-
 });
-
-
