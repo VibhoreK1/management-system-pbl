@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const User = require("./models/User");
+const Project = require("./models/Project");
 
 const authenticateToken = require("./middleware/auth");
 
@@ -25,8 +26,8 @@ mongoose
 
 app.get("/", (req, res) => {
   const obj = {
-    name: "Shukla",
-    Class: 1,
+    name: "rishi",
+    Class: "Degree",
   };
 
   res.send(obj);
@@ -134,6 +135,58 @@ app.get("/dashboard-data", authenticateToken, (req, res) => {
     message: "Welcome to protected dashboard",
     user: req.user,
   });
+});
+
+// User profile
+app.get("/profile", authenticateToken, (req, res) => {
+  res.json({
+    message: "User profile data",
+    user: req.user,
+  });
+});
+
+//Create Project 
+
+app.post("/create-project", authenticateToken, async (req, res) => {
+
+  const { name, description } = req.body;
+
+  try {
+
+    const newProject = new Project({
+      name,
+      description,
+      createdBy: req.user.userId   // from JWT
+    });
+
+    await newProject.save();
+
+    res.json({
+      message: "Project created successfully",
+      project: newProject
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: "Error creating project" });
+  }
+
+});
+
+//Get All Projects
+app.get("/projects", authenticateToken, async (req, res) => {
+
+  try {
+
+    const projects = await Project.find({
+      createdBy: req.user.userId
+    });
+
+    res.json(projects);
+
+  } catch (err) {
+    res.status(500).json({ message: "Error fetching projects" });
+  }
+
 });
 
 app.listen(PORT, () => {
