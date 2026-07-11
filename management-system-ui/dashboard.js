@@ -1,78 +1,133 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  const welcomeText = document.getElementById("welcomeUser");
-
+  // CHECK LOGIN
+  
   const token = localStorage.getItem("token");
 
-  // If no token → go to login
   if (!token) {
+    alert("Please login first");
     window.location.href = "login/login.html";
     return;
   }
 
-  // Fetch protected data
-  // fetch("http://localhost:4001/dashboard-data", {
-  //   method: "GET",
-  //   headers: {
-  //     "Authorization": "Bearer " + token
-  //   }
-  // })
-  // .then(res => res.json())
-  // .then(data => {
+ 
+  // LOAD USER PROFILE
+  
+  const welcomeText = document.getElementById("welcomeUser");
 
-  //   console.log("Dashboard Data:", data);
+  async function loadProfile() {
+    try {
+      const response = await fetch("http://localhost:4001/profile", {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
 
-  //   const welcomeHeading =document.getElementById("Welcome");
-  //   welcomeHeading.textContent = data.message;
+      const data = await response.json();
 
-  //   const email = localStorage.getItem("userEmail");
+      console.log("Profile:", data);
 
-  //   if (email) {
-  //     const username = email.split("@")[0];
+      if (data.user && welcomeText) {
+        welcomeText.textContent = "Welcome " + data.user.email;
+      }
 
-  //     document.getElementById("email").textContent =
-  //       "Welcome to Dashboard: " + username;
-  //   }
-
-  // })
-  // .catch(err => {
-  //   console.error("Error:", err);
-  // });
-
-  // get user details from backend
-
-  fetch("http://localhost:4001/profile", {
-    method: "GET",
-    headers: {
-      "Authorization": "Bearer " + token
+    } catch (err) {
+      console.log(err);
     }
-  })
-  .then(res => res.json())
-  .then(data => {
+  }
 
-    console.log(data);
+  
+  //  CREATE PROJECT
+  
+  const projectForm = document.getElementById("projectForm");
 
-    if (data.user) {
-      welcomeText.textContent = "Welcome " + data.user.email;
+  if (projectForm) {
+    projectForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("projectName").value;
+      const description = document.getElementById("projectDesc").value;
+
+      try {
+        const response = await fetch("http://localhost:4001/create-project", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({ name, description })
+        });
+
+        const data = await response.json();
+
+        alert(data.message);
+
+        // reload projects after creating
+        loadProjects();
+
+        // clear form
+        projectForm.reset();
+
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  }
+
+  // LOAD PROJECTS
+
+  const projectList = document.getElementById("projectList");
+
+  async function loadProjects() {
+
+    if (!projectList) return;
+
+    try {
+      const response = await fetch("http://localhost:4001/projects", {
+        method: "GET",
+        headers: {
+          "Authorization": "Bearer " + token
+        }
+      });
+
+      const projects = await response.json();
+
+      console.log("Projects:", projects);
+
+      projectList.innerHTML = "";
+
+      if (projects.length === 0) {
+        projectList.innerHTML = "<li>No projects found</li>";
+        return;
+      }
+
+      projects.forEach(project => {
+        const li = document.createElement("li");
+        li.textContent = `${project.name} - ${project.description}`;
+        projectList.appendChild(li);
+      });
+
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
-
+  // LOGOUT
 
   const logoutBtn = document.getElementById("logoutBtn");
 
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      alert("Logged out");
+      window.location.href = "login/login.html";
+    });
+  }
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("userEmail");
+ // INITIAL LOAD
+  
+  loadProfile();
+  loadProjects();
 
-    window.location.href = "login/login.html";
-  });
-}
 });
-

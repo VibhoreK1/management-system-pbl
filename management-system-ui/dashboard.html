@@ -2,11 +2,26 @@
 <html>
   <head>
     <title>Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
   </head>
   <body>
-    <h1 id="Welcome"></h1>
-   <h2 id="welcomeUser">Loading...</h2>
-    <p>You have logged in successfully.</p>
+    <h2 id="welcomeUser">Loading...</h2>
+
+    <h3>Create Project</h3>
+
+    <form id="projectForm">
+      <input type="text" id="projectName" placeholder="Project Name" required />
+      <br /><br />
+      <input type="text" id="projectDesc" placeholder="Description" />
+      <br /><br />
+      <button type="submit">Create Project</button>
+    </form>
+
+    <hr />
+
+    <h3>Your Projects</h3>
+    <ul id="projectList"></ul>
+
     <button id="logoutBtn">Logout</button>
   </body>
 
